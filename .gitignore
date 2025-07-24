@@ -1,2 +1,7 @@
 # Virtual Environment
 venv/
+
+# Gemini settings and sensitive files
+.env
+.gemini/
+secrets/
