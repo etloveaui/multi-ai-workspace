@@ -1,123 +1,89 @@
-네, 알겠습니다. 지금까지의 모든 작업 내용을 종합하고 앞으로의 계획까지 포함한 **'Multi-AI Workspace' 프로젝트 계획서**를 매우 상세하고 구체적으로 작성해 드리겠습니다.
-
-이 문서는 나중에 다시 작업을 이어가실 때 완벽한 가이드가 될 것입니다.
+네, 알겠습니다. 제공해주신 프로젝트 계획서와 파일 구조를 바탕으로, 다른 사람이 보거나 나중에 다시 봐도 모든 내용을 완벽하게 이해하고 사용할 수 있도록 **새로운 `README.md` 최종본**을 작성해 드리겠습니다.
 
 -----
 
-## **Multi-AI Workspace 구축 프로젝트: 현황 및 향후 계획**
+# **README.md**
 
-### **I. 프로젝트 개요**
+## **Multi-AI Workspace**
 
-본 프로젝트의 목표는 **단일화된 로컬 개발 환경에서 여러 AI 모델(Gemini, Kimi, Qwen)을 효율적으로 호출하고 관리**하는 것입니다. 이를 위해 안전한 API 키 관리, 각 AI 모델별 최적화된 실행 스크립트, 그리고 통합 CLI 인터페이스를 구축하여 작업 생산성을 극대화하는 것을 목적으로 합니다.
+### 1\. 프로젝트 개요
 
------
+이 프로젝트는 단일화된 로컬 개발 환경에서 여러 AI 모델(Gemini, Kimi, Qwen)을 효율적으로 호출하고 관리하기 위해 구축되었습니다. `Claude Code` CLI를 중심으로 Kimi와 Qwen을 통합하고, Gemini는 독립적인 전용 스크립트를 통해 호출하는 하이브리드 방식을 사용합니다.
 
-### **II. 현재까지 완료된 작업**
+### 2\. 폴더 구조
 
-지금까지 프로젝트의 핵심 기반을 다지고, 각 AI를 독립적으로 실행할 수 있는 모든 스크립트의 개발을 완료했습니다.
+```
+/multi-ai-workspace
+├── .vscode/
+│   └── tasks.json          (VS Code 자동화 작업 파일)
+├── scripts/
+│   ├── Get-ApiKey.ps1      (API 키 로더)
+│   ├── use-qwen.ps1        (Qwen 전환 스크립트)
+│   ├── use-kimi.ps1        (Kimi 전환 스크립트)
+│   ├── ask-gemini.ps1      (Gemini 실행 스크립트)
+│   └── ask_gemini.py       (Gemini 파이썬 로직)
+├── secrets/
+│   └── my_sensitive_data.md (API 키 보관 파일 - Git 비공개)
+├── venv/                   (파이썬 가상환경 - Git 비공개)
+└── requirements.txt        (파이썬 라이브러리 목록)
+```
 
-#### **A. 핵심 환경 설정**
+### 3\. 초기 설정 (새로운 PC에서)
 
-1.  **중앙 비밀 관리소 구축**: 모든 API 키를 `secrets/my_sensitive_data.md` 파일 내에 안전하게 보관하고 `.gitignore`를 통해 버전 관리에서 제외하여 보안을 확보했습니다.
-2.  **Python 가상환경 설정**: 프로젝트의 독립성을 보장하기 위해 `venv` 가상환경을 구성하고, `openai` 및 `google-generativeai` 라이브러리를 설치했습니다.
-3.  **전역 CLI 도구 설치**: `Claude Code` 및 `Qwen Code` CLI를 `npm`을 통해 전역으로 설치하여 통합 인터페이스의 기반을 마련했습니다.
+1.  **프로젝트 복제:** `git clone ...`
 
-#### **B. 범용 스크립트 개발**
+2.  **Claude Code CLI 설치:** `npm install -g @anthropic-ai/claude-code`
 
-  * **API 키 로더 (`Get-ApiKey.ps1`)**: 복잡한 정규식 대신 단순 분할 방식을 사용하여, PowerShell 환경 문제에 대응하고 안정성을 높인 API 키 범용 로더 스크립트를 최종 완성했습니다. 이 스크립트는 모든 실행 스크립트의 핵심 의존성 역할을 합니다.
+3.  **파이썬 가상환경 생성:** `python -m venv venv`
 
-#### **C. 개별 AI 실행기 구현**
+4.  **필요 라이브러리 설치:** `.\venv\Scripts\python.exe -m pip install -r requirements.txt`
 
-각 AI 모델의 API 명세에 맞춰 최적화된 개별 실행 스크립트 세트를 모두 완성했습니다. 각 세트는 사용자 편의를 위한 PowerShell 실행기(`.ps1`)와 실제 API 통신을 담당하는 Python 로직(`.py`)으로 구성됩니다.
+5.  **API 키 파일 생성:** `secrets/my_sensitive_data.md` 파일을 만들고 본인의 API 키를 아래 형식에 맞춰 입력합니다.
 
-1.  **Gemini 실행기**:
+    ```markdown
+    ### Qwen (Alibaba Dashscope)
+    - API Key: `sk-여기에_Qwen_API_키_입력`
 
-      * `ask-gemini.ps1`: `Get-ApiKey`를 호출하여 Gemini API 키를 환경 변수로 설정하고, `ask_gemini.py`를 실행합니다.
-      * `ask_gemini.py`: `google-generativeai` 라이브러리를 사용하여 Gemini API와 통신합니다.
+    ---
 
-2.  **Kimi 실행기**:
+    ### Kimi (Moonshot AI)
+    - API Key: `sk-여기에_Kimi_API_키_입력`
 
-      * [cite\_start]`ask-kimi.ps1`: `Get-ApiKey`를 호출하여 Kimi API 키를 환경 변수로 설정하고, `ask_kimi.py`를 실행합니다[cite: 1].
-      * `ask_kimi.py`: `openai` 라이브러리와 Kimi의 OpenAI 호환 엔드포인트를 사용하여 API와 통신합니다.
+    ---
 
-3.  **Qwen 실행기**:
-
-      * `ask-qwen.ps1`: `Get-ApiKey`를 호출하여 Qwen API 키를 환경 변수로 설정하고, `ask_qwen.py`를 실행합니다.
-      * `ask_qwen.py`: `openai` 라이브러리와 Qwen의 OpenAI 호환 엔드포인트를 사용하여 API와 통신합니다.
-
-#### **D. 통합 CLI 인터페이스 준비**
-
-`Claude Code` CLI의 백엔드를 동적으로 변경하여, 단일 명령어(`claude`)로 여러 AI를 사용할 수 있게 해주는 전환 스크립트 초안을 마련했습니다.
-
-  * `use-qwen.ps1`
-  * `use-kimi.ps1`
-
------
-
-### **III. 향후 작업 계획**
-
-#### **A. 즉시 수행할 작업 (단기)**
-
-1.  **API 키 유효성 확보 및 최종 테스트 (가장 시급)**
-
-      * **문제**: 현재 Kimi와 Qwen에서 401 인증 오류가 발생하고 있습니다.
-      * **조치**: 각 서비스 제공사(Moonshot AI, Alibaba Cloud)의 웹사이트에 방문하여 API 키가 정상적으로 활성화되었는지, 계정에 다른 제약 사항은 없는지 확인해야 합니다. 필요시 키를 재발급받아 `secrets/my_sensitive_data.md` 파일을 업데이트합니다.
-      * **목표**: 3개의 `ask-*.ps1` 스크립트가 모두 오류 없이 정상적으로 AI의 응답을 받아오는지 최종 확인합니다.
-
-2.  **통합 CLI 인터페이스 테스트**
-
-      * **조건**: 위 1번 항목이 해결된 후 진행합니다.
-      * **조치**: `use-qwen.ps1`과 `use-kimi.ps1` 스크립트를 각각 실행하여 `claude` 명령어가 해당 AI 모델의 응답을 정상적으로 가져오는지 테스트합니다.
-
-3.  **문서화 및 버전 관리**
-
-      * **조치**: `docs/tasks/` 폴더에 `multi-ai-center-setup`과 같은 이름으로 이번 작업에 대한 로그를 상세히 기록합니다.
-      * **목표**: `scripts` 폴더에 생성된 모든 스크립트 파일과 관련 문서를 Git에 커밋하여, 현재까지의 안정적인 작업 상태를 영구적으로 저장합니다.
-
-#### **B. 기능 확장 계획 (중장기)**
-
-1.  **파일 입력 기능 추가**: 현재는 텍스트 질문만 가능하지만, 스크립트에 `-FilePath`와 같은 파라미터를 추가하여 특정 파일(예: `.py`, `.md`)의 내용을 AI에게 전달하고 코드 리뷰, 문서 요약 등의 작업을 수행할 수 있도록 확장합니다.
-
-2.  **모델 선택 기능 동적화**: `ask_*.py` 파일 내부에 하드코딩된 모델 이름(예: `qwen-plus`, `gemini-1.5-flash-latest`)을 파라미터로 받아 동적으로 변경할 수 있도록 수정하여, 더 다양한 모델을 유연하게 테스트할 수 있도록 개선합니다.
-
-3.  **응답 저장 및 포매팅**: AI의 응답을 단순히 화면에 출력하는 것을 넘어, 마크다운 파일이나 JSON 형식으로 깔끔하게 저장하는 옵션을 추가합니다.
-
-4.  **신규 AI 모델 추가**: 현재 구축된 아키텍처 패턴을 따라, 향후 Anthropic의 Claude 등 새로운 AI 모델을 손쉽게 추가할 수 있는 확장성을 확보합니다.
-
------
-
-### **IV. 시스템 아키텍처 및 사용법**
-
-#### **A. 작동 원리**
-
-1.  사용자가 `ask-*.ps1` 스크립트를 질문과 함께 실행합니다.
-2.  PowerShell 스크립트는 `Get-ApiKey.ps1`을 통해 `secrets/my_sensitive_data.md`에서 해당 AI의 키를 안전하게 읽어옵니다.
-3.  읽어온 키를 임시 환경 변수(예: `$env:GEMINI_API_KEY`)로 설정합니다.
-4.  가상환경(`venv`)에 설치된 파이썬을 이용해 해당 `ask_*.py` 스크립트를 호출하며 질문을 전달합니다.
-5.  Python 스크립트는 환경 변수에서 API 키를 읽어 AI 서버와 통신하고, 응답을 받아 화면에 출력합니다.
-6.  PowerShell 스크립트는 작업이 끝나면 보안을 위해 설정했던 임시 환경 변수를 삭제합니다.
-
-#### **B. 사용 매뉴얼**
-
-  * **개별 AI에게 질문하기**:
-
-    ```powershell
-    # Gemini에게 질문
-    .\scripts\ask-gemini.ps1 "여기에 질문 입력"
-
-    # Kimi에게 질문
-    .\scripts\ask-kimi.ps1 "여기에 질문 입력"
-
-    # Qwen에게 질문
-    .\scripts\ask-qwen.ps1 "여기에 질문 입력"
+    ### Gemini
+    - API Key: `AIza... 여기에_Gemini_API_키_입력`
     ```
 
-  * **통합 CLI(`claude`) 사용하기**:
+### 4\. 사용법
+
+#### **A. Kimi / Qwen 사용법 (`Claude Code` CLI 통합 방식)**
+
+1.  **AI 전환:** 터미널에 아래 스크립트 중 하나를 실행하여 대화 상대를 선택합니다.
+
+      * Kimi로 전환: `. .\scripts\use-kimi.ps1`
+      * Qwen으로 전환: `. .\scripts\use-qwen.ps1`
+
+2.  **질문하기:** `claude` 명령어로 질문합니다.
+
+      * **Kimi에게:** `claude "Kimi, 오늘 최신 IT 뉴스 3가지만 요약해줘."`
+      * **Qwen에게 (모델 지정 필수):** `claude --model qwen3-coder-plus "파이썬으로 웹크롤러 만드는 법 알려줘"`
+
+#### **B. Gemini 사용법 (전용 스크립트 방식)**
+
+  * Gemini는 아래 전용 스크립트로 직접 질문합니다.
 
     ```powershell
-    # Kimi로 백엔드 설정
-    . .\scripts\use-kimi.ps1
-
-    # claude 명령어로 Kimi 사용
-    claude "Kimi, 너한테 물어보는거야"
+    .\scripts\ask-gemini.ps1 "Gemini, 대한민국의 역사에 대해 설명해줘."
     ```
+
+### 5\. AI에게 주는 지침 (System Prompt 예시)
+
+`claude`나 Gemini와 대화를 시작할 때, 아래와 같은 지침을 먼저 주면 더 좋은 답변을 얻을 수 있습니다.
+
+> "너는 나의 AI 코딩 어시스턴트야. 나는 지금 'Multi-AI Workspace'라는 파워쉘 및 파이썬 기반 프로젝트를 진행하고 있어. 내가 제공하는 코드나 아이디어에 대해 검토하고, 버그를 찾고, 더 효율적인 코드를 제안해줘. 답변은 항상 한국어로, 코드는 마크다운 형식으로 명확하게 설명해줘."
+
+### 6\. 프로젝트 관리 팁
+
+  * **라이브러리 추가 시:** 새로운 파이썬 라이브러리를 설치했다면, 항상 `.\venv\Scripts\python.exe -m pip freeze > requirements.txt` 명령어로 `requirements.txt` 파일을 업데이트하고 Git에 커밋하세요.
+  * **보안:** `secrets` 폴더와 `venv` 폴더는 `.gitignore`에 반드시 포함되어 있어야 합니다. 절대로 API 키나 가상환경을 Git에 올리지 마세요.

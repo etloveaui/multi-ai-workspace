@@ -1,1 +1,6 @@
 .\venv\Scripts\python.exe -m pip install -r requirements.txt
+
+
+venv 없을떄
+
+python -m venv venv

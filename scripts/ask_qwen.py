@@ -10,7 +10,7 @@ try:
 
     client = OpenAI(
         api_key=api_key, # 이 키는 실제로 사용되지 않을 수 있으나 형식상 유지
-        base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+        base_url="https://dashscope-intl.aliyuncs.com/compatible-mode/v1",
     )
 
     # 질문을 프로그램 실행 인자로부터 받습니다.
@@ -20,9 +20,9 @@ try:
         question = "안녕? 너는 누구야?"
 
     completion = client.chat.completions.create(
-        model="qwen-plus",
+        model="qwen3-coder-plus",
         messages=[
-            {"role": "system", "content": "You are Qwen, a large language model from Alibaba Cloud."},
+            {"role": "system", "content": "You are a helpful assistant."},
             {"role": "user", "content": question}
         ],
         temperature=0.3,

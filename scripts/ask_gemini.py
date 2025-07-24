@@ -16,7 +16,7 @@ try:
     else:
         question = "안녕? 자기소개 해봐."
 
-    model = genai.GenerativeModel('gemini-1.5-flash-latest')
+    model = genai.GenerativeModel('gemini-2.5-pro')
     response = model.generate_content(question)
 
     print(response.text)
