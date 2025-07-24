@@ -9,7 +9,7 @@ try:
         raise ValueError("API 키가 설정되지 않았습니다. QWEN_API_KEY 환경 변수를 확인하세요.")
 
     client = OpenAI(
-        api_key=api_key,
+        api_key=api_key, # 이 키는 실제로 사용되지 않을 수 있으나 형식상 유지
         base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
     )
 
@@ -20,12 +20,14 @@ try:
         question = "안녕? 너는 누구야?"
 
     completion = client.chat.completions.create(
-        model="qwen-plus", # Qwen 모델 중 qwen-plus를 사용
+        model="qwen-plus",
         messages=[
             {"role": "system", "content": "You are Qwen, a large language model from Alibaba Cloud."},
             {"role": "user", "content": question}
         ],
         temperature=0.3,
+        # Qwen(Dashscope)은 별도의 헤더로 키를 전달해야 합니다.
+        extra_headers={"Authorization": f"Bearer {api_key}"}
     )
     print(completion.choices[0].message.content)
 

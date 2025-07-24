@@ -11,8 +11,8 @@
 Write-Host "Asking Qwen..." -ForegroundColor Green
 $env:QWEN_API_KEY = (Get-ApiKey -ModelName "Qwen")
 
-# 3. 가상환경의 파이썬을 이용해 파이썬 스크립트를 실행하고 질문을 전달합니다.
+# 3. '프로젝트 폴더 안의' 파이썬을 이용해 스크립트를 실행하고 질문을 전달합니다.
 & "$PSScriptRoot\..\venv\Scripts\python.exe" "$PSScriptRoot\ask_qwen.py" $Question
 
 # 4. 사용이 끝난 임시 환경 변수를 정리합니다.
-Remove-Item -Path "env:QWEN_API_KEY"
+Remove-Item -Path "env:QWEN_API_KEY" -ErrorAction SilentlyContinue
